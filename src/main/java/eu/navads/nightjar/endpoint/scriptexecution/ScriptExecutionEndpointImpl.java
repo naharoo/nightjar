@@ -19,6 +19,6 @@ public class ScriptExecutionEndpointImpl implements ScriptExecutionEndpoint {
     @Override
     @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
     public String getScriptExecutionPageHtml() {
-        return scriptExecutionService.buildPageHtml();
+        return "script-execution";
     }
 }

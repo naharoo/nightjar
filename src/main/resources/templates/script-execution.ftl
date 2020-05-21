@@ -35,7 +35,7 @@
 
 <script crossorigin="anonymous"
         integrity="sha256-0SGl1PJNDyJwcV5T+weg2zpEMrh7xvlwO4oXgvZCeZk="
-        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
+        src="/static/js/requirejs/require.min.js"></script>
 <script>
     require.config({paths: {'vs': 'https://unpkg.com/monaco-editor@0.20.0/min/vs'}});
     window.MonacoEnvironment = {getWorkerUrl: () => proxy};
