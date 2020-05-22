@@ -33,9 +33,7 @@
     </div>
 </div>
 
-<script crossorigin="anonymous"
-        integrity="sha256-0SGl1PJNDyJwcV5T+weg2zpEMrh7xvlwO4oXgvZCeZk="
-        src="/static/js/requirejs/require.min.js"></script>
+<script crossorigin="anonymous" src="/static/js/requirejs/require.min.js"></script>
 <script>
     require.config({paths: {'vs': 'https://unpkg.com/monaco-editor@0.20.0/min/vs'}});
     window.MonacoEnvironment = {getWorkerUrl: () => proxy};
@@ -50,15 +48,13 @@
     require(["vs/editor/editor.main"], function () {
         let editor = monaco.editor.create(document.getElementById('editor-container'), {
             value: [
-                'function x() {',
-                '\tconsole.log("Hello world!");',
-                '}'
+                '${codeSnippet}'
             ].join('\n'),
             language: 'javascript',
             theme: 'vs-dark'
         });
 
-        editor.addEventListener('didType', () => {
+        editor.addListener('didType', () => {
             console.log(editor.getValue());
         });
     });

@@ -8,6 +8,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.logging.LogLevel;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -15,8 +16,11 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+
 @Aspect
 @Component
+@Order(HIGHEST_PRECEDENCE)
 public class LoggerAspect {
 
     private static final String STARTING_MESSAGE = "Starting %s method's execution with following args:'%s'";
