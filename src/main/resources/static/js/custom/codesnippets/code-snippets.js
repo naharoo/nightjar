@@ -6,7 +6,6 @@ function buildDatatableAndFetchData(name = null) {
     let dataTable = $('#dataTable').DataTable({
         "processing": false,
         "serverSide": true,
-        "bServerSide": false,
         "ordering": false,
         "searching": true,
         "paging": true,
