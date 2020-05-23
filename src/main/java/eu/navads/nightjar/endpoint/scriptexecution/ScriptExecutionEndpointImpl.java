@@ -8,7 +8,10 @@ import org.springframework.boot.logging.LogLevel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import java.util.Collections;
+import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
 public class ScriptExecutionEndpointImpl implements ScriptExecutionEndpoint {
@@ -30,9 +33,15 @@ public class ScriptExecutionEndpointImpl implements ScriptExecutionEndpoint {
     public ModelAndView getScriptExecutionPageHtml(final ModelAndView modelAndView, final String snippetId) {
         modelAndView.setViewName("editor");
 
-        final String codeSnippet = isNotBlank(snippetId) ? codeSnippetService.getById(snippetId).getValue() : "";
-        modelAndView.addObject("codeSnippet", codeSnippet);
+        addCodeSnippet(snippetId, modelAndView);
 
         return modelAndView;
+    }
+
+    private void addCodeSnippet(final String snippetId, final ModelAndView modelAndView) {
+        final List<String> codeLines = isBlank(snippetId)
+                                ? Collections.emptyList()
+                                : codeSnippetService.getById(snippetId).getReadyForRenderingValueLines();
+        modelAndView.addObject("codeLines", codeLines);
     }
 }

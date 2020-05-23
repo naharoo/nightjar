@@ -3,10 +3,15 @@ package eu.navads.nightjar.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static eu.navads.nightjar.util.Assertion.notBlank;
 import static eu.navads.nightjar.util.Assertion.notNull;
@@ -77,6 +82,19 @@ public class CodeSnippet {
 
     private void setModificationDate(final LocalDateTime modificationDate) {
         this.modificationDate = notNull("modificationDate", modificationDate);
+    }
+
+    @Transient
+    public List<String> getReadyForRenderingValueLines() {
+        if (StringUtils.isBlank(getValue())) {
+            return Collections.emptyList();
+        }
+
+        return Arrays
+                .stream(getValue().split("\r\n"))
+                .map(line -> line.replace("'", "\""))
+                .map(line -> line.replace("\\n", ""))
+                .collect(Collectors.toList());
     }
 
     @PrePersist
