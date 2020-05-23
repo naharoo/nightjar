@@ -3,7 +3,6 @@ package eu.navads.nightjar.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static eu.navads.nightjar.util.Assertion.notBlank;
 import static eu.navads.nightjar.util.Assertion.notNull;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Entity
 @ToString
@@ -53,7 +53,7 @@ public class CodeSnippet {
     @Column(name = "modification_date", nullable = false)
     private LocalDateTime modificationDate;
 
-    CodeSnippet() {
+    protected CodeSnippet() {
         // For Hibernate
     }
 
@@ -72,7 +72,11 @@ public class CodeSnippet {
     }
 
     public CodeSnippet setValue(final String value) {
-        this.value = value;
+        if (isBlank(value)) {
+            this.value = null;
+        } else {
+            this.value = value.replace("\n", "\r\n").replace("\r\r\n", "\r\n");
+        }
         return this;
     }
 
@@ -86,7 +90,7 @@ public class CodeSnippet {
 
     @Transient
     public List<String> getReadyForRenderingValueLines() {
-        if (StringUtils.isBlank(getValue())) {
+        if (isBlank(getValue())) {
             return Collections.emptyList();
         }
 
