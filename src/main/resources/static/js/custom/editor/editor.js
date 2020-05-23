@@ -1,3 +1,7 @@
+function redirectToUrl(url) {
+    window.location = url;
+}
+
 function attachSaveButtonListener() {
     const $saveBtn = $('#saveBtn');
 
@@ -17,7 +21,7 @@ function attachSaveButtonListener() {
                     value: snippetValue
                 }),
                 success: function (responseData, status, xhr) {
-                    location.reload();
+                    redirectToUrl('/editor?snippetId=' + responseData.id);
                 },
                 dataType: 'JSON'
             })
@@ -30,7 +34,7 @@ function attachSaveButtonListener() {
                     value: snippetValue
                 }),
                 success: function (responseData, status, xhr) {
-                    location.reload();
+                    redirectToUrl('/editor?snippetId=' + responseData.id);
                 },
                 dataType: 'JSON'
             })

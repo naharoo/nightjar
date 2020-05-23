@@ -1,4 +1,4 @@
-package eu.navads.nightjar.endpoint.scriptexecution;
+package eu.navads.nightjar.endpoint.editor;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -9,11 +9,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Validated
 @Controller
-@RequestMapping("/script-execution")
-public interface ScriptExecutionEndpoint {
+@RequestMapping("/editor")
+public interface EditorEndpoint {
 
-    @GetMapping("/editor")
-    ModelAndView getScriptExecutionPageHtml(
+    @GetMapping
+    ModelAndView getEditor(
             ModelAndView modelAndView,
             @RequestParam(value = "snippetId", required = false) String snippetId
     );
