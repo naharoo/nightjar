@@ -17,8 +17,7 @@ function attachSaveButtonListener() {
                     value: snippetValue
                 }),
                 success: function (responseData, status, xhr) {
-                    console.log(status);
-                    console.log(responseData);
+                    location.reload();
                 },
                 dataType: 'JSON'
             })
@@ -31,8 +30,7 @@ function attachSaveButtonListener() {
                     value: snippetValue
                 }),
                 success: function (responseData, status, xhr) {
-                    console.log(status);
-                    console.log(responseData);
+                    location.reload();
                 },
                 dataType: 'JSON'
             })
