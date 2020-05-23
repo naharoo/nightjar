@@ -1,18 +1,26 @@
+function renderDate(rawDate) {
+    return new Date(rawDate).toLocaleString();
+}
+
 function buildDatatableAndFetchData(name = null) {
     let dataTable = $('#dataTable').DataTable({
-        "processing": true,
+        "processing": false,
         "serverSide": true,
+        "bServerSide": false,
         "ordering": false,
-        "searching": false,
+        "searching": true,
+        "paging": true,
         "ajax": {
-            url: '/rest/code-snippets/search',
+            url: `/rest/code-snippets/search`,
             type: 'GET',
-            data: {
-                name: name
-            },
-            dataSrc: "content",
-            recordsTotal: "totalSize",
-            recordsFiltered: "content.length"
+            data: function (d) {
+                return {
+                    draw: d.draw,
+                    name: d.search['value'],
+                    page: d.start,
+                    size: d.length
+                }
+            }
         },
         "columns": [
             {
@@ -21,15 +29,24 @@ function buildDatatableAndFetchData(name = null) {
             },
             {
                 data: "name",
-                title: "Name"
+                title: 'Name',
+                'render': function(data, type, row, meta){
+                    if(type === 'display'){
+                        data = `<a href="/editor?snippetId=${row.id}">${data}</a>`;
+                    }
+
+                    return data;
+                }
             },
             {
                 data: "creationDate",
-                title: "Creation Date"
+                title: "Creation Date",
+                'render': renderDate
             },
             {
                 data: "modificationDate",
-                title: "Modification Date"
+                title: "Modification Date",
+                'render': renderDate
             }
         ]
     });
@@ -37,7 +54,7 @@ function buildDatatableAndFetchData(name = null) {
 
 }
 
-$(document).ready(function () {
+$(document).ready(() => {
     buildDatatableAndFetchData();
 });
 

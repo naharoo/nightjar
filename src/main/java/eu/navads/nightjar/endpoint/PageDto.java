@@ -12,25 +12,33 @@ import java.util.stream.Collectors;
 @Data
 public class PageDto<T> {
 
-    private final List<T> content;
-    private final long totalSize;
+    private final List<T> data;
+    private final long draw;
+    private final long recordsTotal;
+    private final long recordsFiltered;
 
     @JsonCreator
     public PageDto(
-            @JsonProperty("content") final List<T> content,
-            @JsonProperty("totalSize") final long totalSize
+            @JsonProperty("data") final List<T> data,
+            @JsonProperty("draw") final long draw,
+            @JsonProperty("recordsTotal") final long recordsTotal,
+            @JsonProperty("recordsFiltered") final long recordsFiltered
     ) {
-        this.content = content;
-        this.totalSize = totalSize;
+        this.data = data;
+        this.draw = draw;
+        this.recordsTotal = recordsTotal;
+        this.recordsFiltered = recordsFiltered;
     }
 
-    public static <F, T> PageDto<T> from(final Page<F> page, final Function<F, T> converter) {
-        final List<F> content = page.getContent();
-        final long totalSize = page.getTotalElements();
+    public static <F, T> PageDto<T> from(final Page<F> page, final Function<F, T> converter, final int draw) {
+        final List<F> data = page.getContent();
+        final long recordsTotal = page.getTotalElements();
 
         return new PageDto<>(
-                content.stream().map(converter).collect(Collectors.toList()),
-                totalSize
+                data.stream().map(converter).collect(Collectors.toList()),
+                draw,
+                recordsTotal,
+                recordsTotal
         );
     }
 }

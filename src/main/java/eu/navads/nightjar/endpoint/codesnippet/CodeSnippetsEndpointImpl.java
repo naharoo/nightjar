@@ -51,12 +51,17 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
     }
 
     @Override
-    public PageDto<CodeSnippetDto> search(final String name, @Min(0) final int page, @Min(0) @Max(100) final int size) {
+    public PageDto<CodeSnippetDto> search(
+            final String name,
+            @Min(0) final int page,
+            @Min(0) @Max(100) final int size,
+            final int draw
+    ) {
         final CodeSnippetSearchRequest searchRequest = CodeSnippetSearchRequest.createInstance(name, page, size);
 
         final Page<CodeSnippet> pageOfSnippets = service.search(searchRequest);
 
-        return PageDto.from(pageOfSnippets, CodeSnippetDto::from);
+        return PageDto.from(pageOfSnippets, CodeSnippetDto::from, draw);
     }
 
     @Override

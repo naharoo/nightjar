@@ -29,7 +29,8 @@ public interface CodeSnippetsEndpoint {
     PageDto<CodeSnippetDto> search(
             @RequestParam(value = "name", required = false) String name,
             @Min(0) @RequestParam(value = "page", defaultValue = "0") int page,
-            @Min(0) @Max(100) @RequestParam(value = "size", defaultValue = "20") int size
+            @Min(0) @Max(100) @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "draw") int draw
     );
 
     @GetMapping("/code-snippets")

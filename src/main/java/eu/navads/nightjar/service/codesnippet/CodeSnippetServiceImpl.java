@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Order.asc;
+import static org.springframework.data.domain.Sort.Order.desc;
 
 @Service
 public class CodeSnippetServiceImpl implements CodeSnippetService {
@@ -85,7 +86,7 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
     public Page<CodeSnippet> search(@NotNull final CodeSnippetSearchRequest searchRequest) {
         return repository.search(
                 searchRequest.getName(),
-                PageRequest.of(searchRequest.getPage(), searchRequest.getSize(), Sort.by(asc("id")))
+                PageRequest.of(searchRequest.getPage(), searchRequest.getSize(), Sort.by(desc("modificationDate")))
         );
     }
 }

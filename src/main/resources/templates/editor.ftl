@@ -21,8 +21,8 @@
 
         #header-container {
             width: 100%;
-            height: 5%;
-            background-color: #111E1E1E;
+            height: 7%;
+            background-color: #1e1e1e;
 
             display: flex;
             flex-direction: row;
@@ -34,14 +34,19 @@
             padding: 5px;
             margin: 5px;
             width: 200px;
+            color: white;
             border: 1px solid grey;
+            border-radius: 4px;
         }
 
         #newName {
-            padding: 5px;
+            padding: 7px;
             margin: 5px;
             width: 200px;
-            border: 1px solid grey;
+            border: 1px solid white;
+            border-radius: 4px;
+            background-color: #1e1e1e;
+            color: white;
         }
 
         #saveBtn {
@@ -49,8 +54,10 @@
             margin: 5px;
             width: 100px;
             height: 40px;
-            background-color: rgba(30, 22, 43, 0.68);
+            background-color: #1e1e1e;
             color: white;
+            border: 1px solid white;
+            border-radius: 4px;
         }
 
         #editor-container {
