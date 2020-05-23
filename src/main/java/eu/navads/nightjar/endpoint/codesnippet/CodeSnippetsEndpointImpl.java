@@ -10,6 +10,7 @@ import eu.navads.nightjar.service.codesnippet.CodeSnippetService;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -56,5 +57,12 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
         final Page<CodeSnippet> pageOfSnippets = service.search(searchRequest);
 
         return PageDto.from(pageOfSnippets, CodeSnippetDto::from);
+    }
+
+    @Override
+    public ModelAndView getSnippetsPage(final ModelAndView modelAndView) {
+        modelAndView.setViewName("code-snippets");
+
+        return modelAndView;
     }
 }

@@ -2,6 +2,8 @@ package eu.navads.nightjar.domain;
 
 import lombok.Data;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Data
 public class CodeSnippetSearchRequest {
 
@@ -16,6 +18,6 @@ public class CodeSnippetSearchRequest {
     }
 
     public static CodeSnippetSearchRequest createInstance(final String name, final int page, final int size) {
-        return new CodeSnippetSearchRequest(name, page, size);
+        return new CodeSnippetSearchRequest(isBlank(name) ? null : name, page, size);
     }
 }

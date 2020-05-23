@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <link rel="icon" type="image/png" href="/static/images/share.png">
+    <title>Nightjar - Snippet Editor</title>
 
     <style>
         html, body {
