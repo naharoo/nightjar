@@ -3,11 +3,15 @@ package eu.navads.nightjar.service.codesnippet;
 import eu.navads.nightjar.domain.CodeSnippet;
 import eu.navads.nightjar.domain.CodeSnippetCreationRequest;
 import eu.navads.nightjar.domain.CodeSnippetModificationRequest;
+import eu.navads.nightjar.domain.CodeSnippetSearchRequest;
 import eu.navads.nightjar.exception.ResourceAlreadyExistsException;
 import eu.navads.nightjar.exception.ResourceNotFoundException;
 import eu.navads.nightjar.infra.logging.Loggable;
 import eu.navads.nightjar.infra.validation.params.ValidParams;
 import eu.navads.nightjar.repository.CodeSnippetRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +19,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
+
+import static org.springframework.data.domain.Sort.Order.asc;
 
 @Service
 public class CodeSnippetServiceImpl implements CodeSnippetService {
@@ -70,5 +76,16 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
         final CodeSnippet codeSnippetToBeUpdated = snippet.setValue(modificationRequest.getValue());
 
         return repository.save(codeSnippetToBeUpdated);
+    }
+
+    @Override
+    @Loggable
+    @ValidParams
+    @Transactional
+    public Page<CodeSnippet> search(@NotNull final CodeSnippetSearchRequest searchRequest) {
+        return repository.search(
+                searchRequest.getName(),
+                PageRequest.of(searchRequest.getPage(), searchRequest.getSize(), Sort.by(asc("id")))
+        );
     }
 }

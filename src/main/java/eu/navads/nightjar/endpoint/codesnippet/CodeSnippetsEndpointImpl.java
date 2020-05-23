@@ -3,9 +3,12 @@ package eu.navads.nightjar.endpoint.codesnippet;
 import eu.navads.nightjar.domain.CodeSnippet;
 import eu.navads.nightjar.domain.CodeSnippetCreationRequest;
 import eu.navads.nightjar.domain.CodeSnippetModificationRequest;
+import eu.navads.nightjar.domain.CodeSnippetSearchRequest;
+import eu.navads.nightjar.endpoint.PageDto;
 import eu.navads.nightjar.infra.logging.Loggable;
 import eu.navads.nightjar.service.codesnippet.CodeSnippetService;
 import org.springframework.boot.logging.LogLevel;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -42,5 +45,14 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
         final CodeSnippet updatedSnippet = service.update(id, modificationRequest);
 
         return CodeSnippetDto.from(updatedSnippet);
+    }
+
+    @Override
+    public PageDto<CodeSnippetDto> search(final String name, final int page, final int size) {
+        final CodeSnippetSearchRequest searchRequest = CodeSnippetSearchRequest.createInstance(name, page, size);
+
+        final Page<CodeSnippet> pageOfSnippets = service.search(searchRequest);
+
+        return PageDto.from(pageOfSnippets, CodeSnippetDto::from);
     }
 }
