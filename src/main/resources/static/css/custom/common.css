@@ -1,0 +1,7 @@
+.notifyjs-bootstrap-error {
+    color: #1e1e1e!important;
+    background-color: white!important;
+    border-color: #EED3D7!important;
+    text-align: center!important;
+    background-image: url(/static/images/bug.png)!important;
+}

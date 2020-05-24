@@ -1,59 +1,16 @@
-function renderDate(rawDate) {
-    return new Date(rawDate).toLocaleString();
-}
-
-function buildDatatableAndFetchData(name = null) {
-    let dataTable = $('#dataTable').DataTable({
-        "processing": false,
-        "serverSide": true,
-        "ordering": false,
-        "searching": true,
-        "paging": true,
-        "ajax": {
-            url: `/rest/code-snippets/search`,
-            type: 'GET',
-            data: function (d) {
-                return {
-                    draw: d.draw,
-                    name: d.search['value'],
-                    page: d.start,
-                    size: d.length
-                }
-            }
-        },
-        "columns": [
-            {
-                data: "id",
-                title: "Id"
-            },
-            {
-                data: "name",
-                title: 'Name',
-                'render': function(data, type, row, meta){
-                    if(type === 'display'){
-                        data = `<a href="/editor?snippetId=${row.id}">${data}</a>`;
-                    }
-
-                    return data;
-                }
-            },
-            {
-                data: "creationDate",
-                title: "Creation Date",
-                'render': renderDate
-            },
-            {
-                data: "modificationDate",
-                title: "Modification Date",
-                'render': renderDate
-            }
-        ]
+function bindKeyboardShortcuts() {
+    $.key('alt+s', function (e) {
+        const $searchInput = $('#searchInput');
+        $searchInput.focus();
     });
-
-
+    $.key('alt+n', function (e) {
+        const $newSnippetBtn = $('#newSnippetBtn');
+        $newSnippetBtn.click();
+    });
 }
 
 $(document).ready(() => {
-    buildDatatableAndFetchData();
+    attachNewSnippetButtonListener();
+    bindKeyboardShortcuts();
 });
 

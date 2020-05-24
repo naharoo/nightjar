@@ -68,16 +68,8 @@
             padding: 5px 0 0 0;
             background-color: #1e1e1e;
         }
-
-        .notifyjs-bootstrap-error {
-            color: #1e1e1e!important;
-            background-color: white!important;
-            border-color: #EED3D7!important;
-            text-align: center!important;
-            background-image: url(/static/images/bug.png)!important;
-        }
-
     </style>
+    <link type="text/css" href="/static/css/custom/common.css"/>
 </head>
 <body>
 <div id="main-container">
@@ -124,6 +116,7 @@
         window.editor.isNewSnippet = ${isNewSnippet};
     });
 </script>
+<script src="/static/js/custom/common.js"></script>
 <script src="/static/js/custom/editor/editor.js"></script>
 </body>
 </html>
