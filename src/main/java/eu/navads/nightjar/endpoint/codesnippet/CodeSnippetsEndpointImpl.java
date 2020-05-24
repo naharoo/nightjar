@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -52,17 +50,12 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
 
     @Override
     @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
-    public PageDto<CodeSnippetDto> search(
-            final String name,
-            @Min(0) final int page,
-            @Min(0) @Max(100) final int size,
-            final int draw
-    ) {
+    public PageDto<CodeSnippetDto> search(final String name, final int page, final int size) {
         final CodeSnippetSearchRequest searchRequest = CodeSnippetSearchRequest.createInstance(name, page, size);
 
         final Page<CodeSnippet> pageOfSnippets = service.search(searchRequest);
 
-        return PageDto.from(pageOfSnippets, CodeSnippetDto::from, draw);
+        return PageDto.from(pageOfSnippets, CodeSnippetDto::from);
     }
 
     @Override

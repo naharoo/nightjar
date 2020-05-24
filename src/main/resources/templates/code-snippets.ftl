@@ -158,46 +158,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>babc49d3-a50f-4bb0-875b-782dcd0348a2</td>
-                    <td>Gavno</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                </tr>
-                <tr>
-                    <td>babc49d3-a50f-4bb0-875b-782dcd0348a2</td>
-                    <td>Gavno</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                </tr>
-                <tr>
-                    <td>babc49d3-a50f-4bb0-875b-782dcd0348a2</td>
-                    <td>Gavno</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                </tr>
-                <tr>
-                    <td>babc49d3-a50f-4bb0-875b-782dcd0348a2</td>
-                    <td>Gavno</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                </tr>
-                <tr>
-                    <td>babc49d3-a50f-4bb0-875b-782dcd0348a2</td>
-                    <td>Gavno</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                    <td>2020-05-23 19:48:41.624922</td>
-                </tr>
                 </tbody>
             </table>
         </div>
         <div class="pagination-wrapper">
             <div class="pagination-container">
-                <span class="pagination-info">
+                <span id="paginationInfo" class="pagination-info">
                     1 of 10
                 </span>
-                <button class="pagination-navigation-button pagination-navigation-button-disabled"><</button>
-                <button class="pagination-navigation-button">></button>
+                <button id="previousPageBtn" class="pagination-navigation-button pagination-navigation-button-disabled"><</button>
+                <button id="nextPageBtn" class="pagination-navigation-button">></button>
             </div>
         </div>
     </div>

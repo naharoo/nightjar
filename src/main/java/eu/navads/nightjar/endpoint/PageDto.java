@@ -12,33 +12,26 @@ import java.util.stream.Collectors;
 @Data
 public class PageDto<T> {
 
-    private final List<T> data;
-    private final long draw;
-    private final long recordsTotal;
-    private final long recordsFiltered;
+    private final List<T> content;
+    private final long totalItems;
+    private final long totalPages;
 
     @JsonCreator
     public PageDto(
-            @JsonProperty("data") final List<T> data,
-            @JsonProperty("draw") final long draw,
-            @JsonProperty("recordsTotal") final long recordsTotal,
-            @JsonProperty("recordsFiltered") final long recordsFiltered
+            @JsonProperty("content") final List<T> content,
+            @JsonProperty("totalItems") final long totalItems,
+            @JsonProperty("totalPages") final long totalPages
     ) {
-        this.data = data;
-        this.draw = draw;
-        this.recordsTotal = recordsTotal;
-        this.recordsFiltered = recordsFiltered;
+        this.content = content;
+        this.totalItems = totalItems;
+        this.totalPages = totalPages;
     }
 
-    public static <F, T> PageDto<T> from(final Page<F> page, final Function<F, T> converter, final int draw) {
-        final List<F> data = page.getContent();
-        final long recordsTotal = page.getTotalElements();
+    public static <F, T> PageDto<T> from(final Page<F> page, final Function<F, T> converter) {
+        final List<F> content = page.getContent();
+        final long totalItems = page.getTotalElements();
+        final int totalPages = page.getTotalPages();
 
-        return new PageDto<>(
-                data.stream().map(converter).collect(Collectors.toList()),
-                draw,
-                recordsTotal,
-                recordsTotal
-        );
+        return new PageDto<>(content.stream().map(converter).collect(Collectors.toList()), totalItems, totalPages);
     }
 }
