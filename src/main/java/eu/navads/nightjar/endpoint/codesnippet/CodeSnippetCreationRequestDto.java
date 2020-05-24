@@ -10,12 +10,13 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class CodeSnippetCreationRequestDto {
 
+    @NotBlank
     private final String name;
     private final String value;
 
     @JsonCreator
     public CodeSnippetCreationRequestDto(
-            @NotBlank @JsonProperty("name") final String name,
+            @JsonProperty("name") final String name,
             @JsonProperty("value") final String value
     ) {
         this.name = name;

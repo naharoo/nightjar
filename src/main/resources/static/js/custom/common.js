@@ -3,11 +3,12 @@ function redirectToUrl(url) {
 }
 
 function showErrorPopup(xhr, status, error) {
-    $.notify(`${error}\nYou can find error details in console`, {
+    const responseJSON = xhr.responseJSON;
+    $.notify(`${error}\n${responseJSON.messages[0]}`, {
         position: 'top-center',
         autoHide: true
     })
-    console.log({errorDetails: xhr.responseJSON});
+    console.log({errorDetails: responseJSON});
 }
 
 function convertDateToHumanReadableForm(rawDate) {
