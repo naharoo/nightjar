@@ -2,6 +2,14 @@ function redirectToUrl(url) {
     window.location = url;
 }
 
+function showErrorPopup(xhr, status, error) {
+    $.notify(`${error}\nYou can find error details in console`, {
+        position: 'top-center',
+        autoHide: true
+    })
+    console.log({errorDetails: xhr.responseJSON});
+}
+
 function attachSaveButtonListener() {
     const $saveBtn = $('#saveBtn');
 
@@ -23,6 +31,7 @@ function attachSaveButtonListener() {
                 success: function (responseData, status, xhr) {
                     redirectToUrl('/editor?snippetId=' + responseData.id);
                 },
+                error: showErrorPopup,
                 dataType: 'JSON'
             })
         } else {
@@ -36,6 +45,7 @@ function attachSaveButtonListener() {
                 success: function (responseData, status, xhr) {
                     redirectToUrl('/editor?snippetId=' + responseData.id);
                 },
+                error: showErrorPopup,
                 dataType: 'JSON'
             })
         }

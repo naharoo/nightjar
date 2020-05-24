@@ -68,6 +68,15 @@
             padding: 5px 0 0 0;
             background-color: #1e1e1e;
         }
+
+        .notifyjs-bootstrap-error {
+            color: #1e1e1e!important;
+            background-color: white!important;
+            border-color: #EED3D7!important;
+            text-align: center!important;
+            background-image: url(/static/images/bug.png)!important;
+        }
+
     </style>
 </head>
 <body>
@@ -87,9 +96,10 @@
     <div id="editor-container"></div>
 </div>
 
-<script src="/static/js/requirejs/require.min.js"></script>
 <script src="/static/js/jquery/jquery.min.js"></script>
 <script src="/static/js/jquery/jquery-key.js"></script>
+<script src="/static/js/notifyjs/notify.min.js"></script>
+<script src="/static/js/requirejs/require.min.js"></script>
 <script>
     require.config({paths: {'vs': 'https://unpkg.com/monaco-editor@0.20.0/min/vs'}});
     window.MonacoEnvironment = {getWorkerUrl: () => proxy};
