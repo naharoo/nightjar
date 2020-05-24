@@ -67,8 +67,11 @@
             border-radius: 4px;
         }
 
-        .main-container {
+        .table-container {
             margin: 20px 60px;
+        }
+
+        .table-body-container {
             border: 1px solid white;
             border-radius: 4px;
         }
@@ -87,9 +90,47 @@
             text-align: center;
         }
 
+        .snippets-table > tbody > tr:hover {
+            background-color: #2e856e;
+            cursor: pointer;
+        }
+
         .snippets-table > tbody > tr > td {
             padding: 10px;
         }
+
+        .pagination-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .pagination-container {
+
+        }
+
+        .pagination-navigation-button {
+            background-color: transparent;
+            border: 1px solid grey;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: x-large;
+        }
+
+        .pagination-navigation-button-disabled {
+            pointer-events: none;
+            color: grey;
+            border: 1px solid grey;
+        }
+
+        .pagination-info {
+            color: darkgrey;
+            margin-right: 20px;
+        }
+
     </style>
     <link type="text/css" href="/static/css/custom/common.css"/>
 </head>
@@ -105,17 +146,18 @@
         </div>
     </div>
 
-    <div class="main-container">
-        <table id="snippets-table" class="snippets-table">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Creation Date</th>
-                <th>Modification Date</th>
-            </tr>
-            </thead>
-            <tbody>
+    <div class="table-container">
+        <div class="table-body-container">
+            <table id="snippets-table" class="snippets-table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Creation Date</th>
+                    <th>Modification Date</th>
+                </tr>
+                </thead>
+                <tbody>
                 <tr>
                     <td>babc49d3-a50f-4bb0-875b-782dcd0348a2</td>
                     <td>Gavno</td>
@@ -146,8 +188,18 @@
                     <td>2020-05-23 19:48:41.624922</td>
                     <td>2020-05-23 19:48:41.624922</td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-wrapper">
+            <div class="pagination-container">
+                <span class="pagination-info">
+                    1 of 10
+                </span>
+                <button class="pagination-navigation-button pagination-navigation-button-disabled"><</button>
+                <button class="pagination-navigation-button">></button>
+            </div>
+        </div>
     </div>
 </div>
 

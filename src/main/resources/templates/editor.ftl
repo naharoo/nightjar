@@ -69,7 +69,7 @@
             background-color: #1e1e1e;
         }
     </style>
-    <link type="text/css" href="/static/css/custom/common.css"/>
+    <link rel="stylesheet" href="/static/css/custom/common.css"/>
 </head>
 <body>
 <div id="main-container">
