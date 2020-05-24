@@ -42,6 +42,40 @@ function attachSaveButtonListener() {
     })
 }
 
+function attachAllSnippetsButtonListener() {
+    const $allSnippetsBtn = $('#allSnippetsBtn');
+
+    $allSnippetsBtn.on('click', function (event) {
+        redirectToUrl('/code-snippets');
+    });
+}
+
+function attachNewSnippetButtonListener() {
+    const $newSnippetBtn = $('#newSnippetBtn');
+
+    $newSnippetBtn.on('click', function (event) {
+        redirectToUrl('/editor');
+    });
+}
+
+function bindKeyboardShortcuts() {
+    $.key('alt+s', function (e) {
+        const $saveBtn = $('#saveBtn');
+        $saveBtn.click();
+    });
+    $.key('alt+a', function (e) {
+        const $allSnippetsBtn = $('#allSnippetsBtn');
+        $allSnippetsBtn.click();
+    });
+    $.key('alt+n', function (e) {
+        const $newSnippetBtn = $('#newSnippetBtn');
+        $newSnippetBtn.click();
+    });
+}
+
 $(document).ready(function () {
     attachSaveButtonListener();
+    attachAllSnippetsButtonListener();
+    attachNewSnippetButtonListener();
+    bindKeyboardShortcuts();
 });

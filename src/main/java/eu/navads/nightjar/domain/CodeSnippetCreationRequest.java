@@ -19,6 +19,6 @@ public class CodeSnippetCreationRequest {
     }
 
     public static CodeSnippetCreationRequest createInstance(final String name, final String value) {
-        return new CodeSnippetCreationRequest(notBlank(name, name), value);
+        return new CodeSnippetCreationRequest(notBlank("name", name), value);
     }
 }

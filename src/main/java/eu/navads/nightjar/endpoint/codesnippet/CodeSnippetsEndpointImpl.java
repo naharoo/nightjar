@@ -51,6 +51,7 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
     }
 
     @Override
+    @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
     public PageDto<CodeSnippetDto> search(
             final String name,
             @Min(0) final int page,
@@ -65,6 +66,7 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
     }
 
     @Override
+    @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
     public ModelAndView getSnippetsPage(final ModelAndView modelAndView) {
         modelAndView.setViewName("code-snippets");
 

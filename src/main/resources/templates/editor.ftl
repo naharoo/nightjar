@@ -33,10 +33,12 @@
         #snippetName {
             padding: 5px;
             margin: 5px;
-            width: 200px;
+            width: auto;
+            min-width: 200px;
             color: white;
             border: 1px solid grey;
             border-radius: 4px;
+            text-align: center;
         }
 
         #newName {
@@ -47,9 +49,10 @@
             border-radius: 4px;
             background-color: #1e1e1e;
             color: white;
+            text-align: center;
         }
 
-        #saveBtn {
+        .header-btn {
             padding: 7px;
             margin: 5px;
             width: 100px;
@@ -73,15 +76,20 @@
         <#if isNewSnippet?boolean>
             <input id="newName" type="text" placeholder="New snippet name"/>
         <#else>
-            <span id="snippetName">Name: ${snippetName}</span>
+            <span id="snippetName">${snippetName}</span>
         </#if>
-        <button id="saveBtn">Save</button>
+        <div>
+            <button id="newSnippetBtn" class="header-btn">New Snippet</button>
+            <button id="allSnippetsBtn" class="header-btn">All Snippets</button>
+            <button id="saveBtn" class="header-btn">Save</button>
+        </div>
     </div>
     <div id="editor-container"></div>
 </div>
 
 <script src="/static/js/requirejs/require.min.js"></script>
 <script src="/static/js/jquery/jquery.min.js"></script>
+<script src="/static/js/jquery/jquery-key.js"></script>
 <script>
     require.config({paths: {'vs': 'https://unpkg.com/monaco-editor@0.20.0/min/vs'}});
     window.MonacoEnvironment = {getWorkerUrl: () => proxy};
