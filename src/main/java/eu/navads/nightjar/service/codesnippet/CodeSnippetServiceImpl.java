@@ -20,7 +20,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
-import static org.springframework.data.domain.Sort.Order.asc;
 import static org.springframework.data.domain.Sort.Order.desc;
 
 @Service
@@ -54,7 +53,7 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
     public CodeSnippet create(@Valid @NotNull final CodeSnippetCreationRequest creationRequest) {
         final String name = creationRequest.getName();
 
-        final Optional<CodeSnippet> existingCodeSnippetWithSameNameOpt = repository.findByName(name);
+        final Optional<CodeSnippet> existingCodeSnippetWithSameNameOpt = findByName(name);
         if (existingCodeSnippetWithSameNameOpt.isPresent()) {
             throw ResourceAlreadyExistsException.createInstance(CodeSnippet.class, "name", name);
         }
@@ -62,6 +61,10 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
         final CodeSnippet newCodeSnippet = CodeSnippet.named(name).setValue(creationRequest.getValue());
 
         return repository.save(newCodeSnippet);
+    }
+
+    private Optional<CodeSnippet> findByName(final String name) {
+        return repository.findByName(name);
     }
 
     @Override
@@ -82,11 +85,23 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
     @Override
     @Loggable
     @ValidParams
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<CodeSnippet> search(@NotNull final CodeSnippetSearchRequest searchRequest) {
         return repository.search(
                 searchRequest.getName(),
                 PageRequest.of(searchRequest.getPage(), searchRequest.getSize(), Sort.by(desc("modificationDate")))
         );
+    }
+
+    @Override
+    @Loggable
+    @ValidParams
+    @Transactional(readOnly = true)
+    public CodeSnippet getByName(@NotBlank final String name) {
+        final Optional<CodeSnippet> codeSnippetOpt = findByName(name);
+        return codeSnippetOpt.orElseThrow(() -> ResourceNotFoundException.createInstance(
+                CodeSnippet.class,
+                String.format("name: %s", name)
+        ));
     }
 }

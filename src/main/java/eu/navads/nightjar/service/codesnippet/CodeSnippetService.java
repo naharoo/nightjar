@@ -19,4 +19,6 @@ public interface CodeSnippetService {
     CodeSnippet update(@NotBlank String id, @Valid @NotNull CodeSnippetModificationRequest modificationRequest);
 
     Page<CodeSnippet> search(@NotNull CodeSnippetSearchRequest searchRequest);
+
+    CodeSnippet getByName(@NotBlank String name);
 }
