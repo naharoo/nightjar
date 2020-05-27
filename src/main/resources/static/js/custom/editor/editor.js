@@ -2,9 +2,9 @@ function attachSaveButtonListener() {
     const $saveBtn = $('#saveBtn');
 
     $saveBtn.on('click', function (event) {
-        const isNewSnippet = window.editor.isNewSnippet;
+        const isNewSnippet = window.snippet.isNew;
         const snippetValue = window.editor.getValue();//.replace(/\n/g, '\r\n')
-        const snippetId = !isNewSnippet ? window.editor.snippetId : null;
+        const snippetId = !isNewSnippet ? window.snippet.id : null;
         const newName = isNewSnippet ? $('#newName')[0].value : null;
 
         if (isNewSnippet) {

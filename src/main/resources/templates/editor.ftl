@@ -21,7 +21,6 @@
 
         #header-container {
             width: 100%;
-            height: 7%;
             background-color: #1e1e1e;
 
             display: flex;
@@ -30,15 +29,31 @@
             justify-content: space-between;
         }
 
+        .header-left-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
         #snippetName {
-            padding: 5px;
+            display: inline-block;
+            padding: 10px;
             margin: 5px;
-            width: auto;
-            min-width: 200px;
+            width: 150px;
+            height: 18px;
             color: white;
             border: 1px solid grey;
             border-radius: 4px;
             text-align: center;
+            white-space: nowrap;
+            overflow-y: scroll;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;
+        }
+
+        #snippetName::-webkit-scrollbar {
+            width: 0;
+            height: 0;
         }
 
         #newName {
@@ -64,7 +79,7 @@
         }
 
         #editor-container {
-            height: 95%;
+            height: 100%;
             padding: 5px 0 0 0;
             background-color: #1e1e1e;
         }
@@ -73,19 +88,25 @@
 </head>
 <body>
 <div id="main-container">
-    <div id="header-container">
-        <#if isNewSnippet?boolean>
-            <input id="newName" type="text" placeholder="New snippet name"/>
-        <#else>
-            <span id="snippetName">${snippetName}</span>
-        </#if>
-        <div>
-            <button id="newSnippetBtn" class="header-btn">New Snippet</button>
-            <button id="allSnippetsBtn" class="header-btn">All Snippets</button>
-            <button id="saveBtn" class="header-btn">Save</button>
+<#--    <div>sjssdfkdsfhkdhkjhfjkdshkjhj</div>-->
+<#--    <div>-->
+        <div id="header-container">
+            <div class="header-left-container">
+                <#if isNewSnippet?boolean>
+                    <input id="newName" type="text" placeholder="New snippet name"/>
+                <#else>
+                    <div id="snippetName">${snippetName}</div>
+                </#if>
+                <button id="snippetDetailsBtn" class="header-btn">Details</button>
+            </div>
+            <div>
+                <button id="newSnippetBtn" class="header-btn">New Snippet</button>
+                <button id="allSnippetsBtn" class="header-btn">All Snippets</button>
+                <button id="saveBtn" class="header-btn">Save</button>
+            </div>
         </div>
-    </div>
-    <div id="editor-container"></div>
+        <div id="editor-container"></div>
+<#--    </div>-->
 </div>
 
 <script src="/static/js/jquery/jquery.min.js"></script>
@@ -93,6 +114,8 @@
 <script src="/static/js/notifyjs/notify.min.js"></script>
 <script src="/static/js/requirejs/require.min.js"></script>
 <script>
+    window.snippet = {};
+
     require.config({paths: {'vs': 'https://unpkg.com/monaco-editor@0.20.0/min/vs'}});
     window.MonacoEnvironment = {getWorkerUrl: () => proxy};
 
@@ -112,8 +135,9 @@
             language: 'javascript',
             theme: 'vs-dark'
         });
-        window.editor.snippetId = '${snippetId}';
-        window.editor.isNewSnippet = ${isNewSnippet};
+
+        window.snippet.id = '${snippetId}';
+        window.snippet.isNew = ${isNewSnippet};
     });
 </script>
 <script src="/static/js/custom/common.js"></script>
