@@ -9,12 +9,12 @@
         <version>2.3.0.RELEASE</version>
     </parent>
 
-    <groupId>eu.navads.nightjar</groupId>
-    <artifactId>navads-nightjar</artifactId>
+    <groupId>club.thewhitewall.nightjar</groupId>
+    <artifactId>nightjar</artifactId>
     <version>0.1.0</version>
 
-    <name>navads-nightjar</name>
-    <description>Navads Script Execution Engine</description>
+    <name>nightjar</name>
+    <description>Script Editor and Execution Engine</description>
 
     <properties>
         <!-- Application -->
@@ -72,6 +72,14 @@
                         <includeSystemScope>true</includeSystemScope>
                     </configuration>
                 </plugin>
+
+                <!-- Maven Deploy Plugin -->
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -109,21 +117,13 @@
                                 <skip>true</skip>
                             </configuration>
                         </plugin>
-
-                        <!-- Maven Deploy Plugin -->
-                        <plugin>
-                            <artifactId>maven-deploy-plugin</artifactId>
-                            <configuration>
-                                <skip>true</skip>
-                            </configuration>
-                        </plugin>
                     </plugins>
                 </pluginManagement>
             </build>
         </profile>
 
         <profile>
-            <id>development-ci</id>
+            <id>ci-cd</id>
             <build>
                 <pluginManagement>
                     <plugins>
@@ -131,7 +131,7 @@
                         <plugin>
                             <groupId>com.spotify</groupId>
                             <artifactId>dockerfile-maven-plugin</artifactId>
-                            <version>${dockerfile.plugin.version}</version>
+                            <version>${dockerfile-maven-version}</version>
                             <executions>
                                 <execution>
                                     <id>default</id>
@@ -142,155 +142,22 @@
                                 </execution>
                             </executions>
                             <configuration>
-                                <skip>${dockerfile.build.skip}</skip>
-                                <repository>docker-registry.dev.navads.eu/nightjar</repository>
+                                <repository>thewhitewall/nightjar</repository>
                                 <buildArgs>
                                     <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                                 </buildArgs>
-                                <tag>snapshot</tag>
-                                <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                            </configuration>
-                        </plugin>
-
-                        <!-- Maven Deploy Plugin -->
-                        <plugin>
-                            <artifactId>maven-deploy-plugin</artifactId>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-
-        <profile>
-            <id>production</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <!-- Spotify Dockerfile Plugin -->
-                        <plugin>
-                            <groupId>com.spotify</groupId>
-                            <artifactId>dockerfile-maven-plugin</artifactId>
-                            <version>${dockerfile.plugin.version}</version>
-                            <executions>
-                                <execution>
-                                    <id>build-image</id>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>build</goal>
-                                    </goals>
-                                    <configuration>
-                                        <classifier>docker-info-build</classifier>
-                                    </configuration>
-                                </execution>
-
-                                <execution>
-                                    <id>tag-image-version</id>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>tag</goal>
-                                    </goals>
-                                    <configuration>
-                                        <classifier>docker-info-tag-version</classifier>
-                                        <tag>${project.version}</tag>
-                                    </configuration>
-                                </execution>
-
-                                <execution>
-                                    <id>tag-image-latest</id>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>tag</goal>
-                                    </goals>
-                                    <configuration>
-                                        <tag>latest</tag>
-                                    </configuration>
-                                </execution>
-
-                                <execution>
-                                    <id>push-image-version</id>
-                                    <phase>deploy</phase>
-                                    <goals>
-                                        <goal>push</goal>
-                                    </goals>
-                                    <configuration>
-                                        <tag>${project.version}</tag>
-                                    </configuration>
-                                </execution>
-
-                                <execution>
-                                    <id>push-image-latest</id>
-                                    <phase>deploy</phase>
-                                    <goals>
-                                        <goal>push</goal>
-                                    </goals>
-                                    <configuration>
-                                        <tag>latest</tag>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                            <configuration>
-                                <skip>${dockerfile.build.skip}</skip>
-                                <repository>docker-registry.dev.navads.eu/nightjar</repository>
-                                <buildArgs>
-                                    <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                                </buildArgs>
+                                <tag>only</tag>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <username>${env.DOCKER_USERNAME}</username>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <password>${env.DOCKER_PASSWORD}</password>
                                 <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
-                                <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                             </configuration>
-                        </plugin>
-
-                        <!-- Maven Deploy Plugin -->
-                        <plugin>
-                            <artifactId>maven-deploy-plugin</artifactId>
                         </plugin>
                     </plugins>
                 </pluginManagement>
             </build>
         </profile>
-
-        <profile>
-            <id>custom-docker-tag</id>
-            <properties>
-                <docker.tag>stitch</docker.tag>
-            </properties>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <!-- Spotify Dockerfile Plugin -->
-                        <plugin>
-                            <groupId>com.spotify</groupId>
-                            <artifactId>dockerfile-maven-plugin</artifactId>
-                            <version>${dockerfile.plugin.version}</version>
-                            <executions>
-                                <execution>
-                                    <id>default</id>
-                                    <goals>
-                                        <goal>build</goal>
-                                        <goal>push</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-
-                            <configuration>
-                                <skip>${dockerfile.build.skip}</skip>
-                                <repository>docker-registry.dev.navads.eu/nightjar</repository>
-                                <buildArgs>
-                                    <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                                </buildArgs>
-                                <tag>${docker.tag}</tag>
-                                <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                            </configuration>
-                        </plugin>
-
-                        <!-- Maven Deploy Plugin -->
-                        <plugin>
-                            <artifactId>maven-deploy-plugin</artifactId>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-
     </profiles>
 
     <dependencies>
@@ -371,34 +238,5 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>navads-releases</id>
-            <url>https://maven.dev.navads.eu/repository/maven-releases/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>navads-snapshots</id>
-            <url>https://maven.dev.navads.eu/repository/maven-snapshots/</url>
-            <snapshots>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>https://maven.dev.navads.eu/repository/maven-snapshots/</url>
-        </snapshotRepository>
-
-        <repository>
-            <id>nexus</id>
-            <url>https://maven.dev.navads.eu/repository/maven-releases/</url>
-        </repository>
-    </distributionManagement>
 
 </project>
