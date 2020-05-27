@@ -1,5 +1,6 @@
 package club.thewhitewall.nightjar.service.codesnippet.execution;
 
+import club.thewhitewall.nightjar.domain.CodeSnippet;
 import com.fasterxml.jackson.databind.JsonNode;
 import club.thewhitewall.nightjar.domain.CodeSnippetExecutionRequest;
 import club.thewhitewall.nightjar.infra.logging.Loggable;
@@ -16,10 +17,15 @@ import javax.validation.constraints.NotNull;
 public class CodeSnippetExecutionServiceImpl implements CodeSnippetExecutionService {
 
     private final CodeSnippetService codeSnippetService;
+    private final CodeSnippetExecutionStrategy codeSnippetExecutionStrategy;
 
     @Autowired
-    public CodeSnippetExecutionServiceImpl(final CodeSnippetService codeSnippetService) {
+    public CodeSnippetExecutionServiceImpl(
+            final CodeSnippetService codeSnippetService,
+            final CodeSnippetExecutionStrategy codeSnippetExecutionStrategy
+    ) {
         this.codeSnippetService = codeSnippetService;
+        this.codeSnippetExecutionStrategy = codeSnippetExecutionStrategy;
     }
 
     @Override
@@ -28,7 +34,7 @@ public class CodeSnippetExecutionServiceImpl implements CodeSnippetExecutionServ
     @Transactional(readOnly = true)
     public JsonNode execute(@Valid @NotNull final CodeSnippetExecutionRequest executionRequest) {
         final String snippetName = executionRequest.getSnippetName();
-        codeSnippetService.getByName(snippetName);
-        return executionRequest.getData();
+        final CodeSnippet snippet = codeSnippetService.getByName(snippetName);
+        return codeSnippetExecutionStrategy.execute(snippet, executionRequest.getData());
     }
 }
