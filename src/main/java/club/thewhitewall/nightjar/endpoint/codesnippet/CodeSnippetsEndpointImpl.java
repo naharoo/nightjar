@@ -15,7 +15,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
     @Override
     @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
     public CodeSnippetDto create(@Valid @NotNull final CodeSnippetCreationRequestDto creationRequestDto) {
-        final CodeSnippetCreationRequest creationRequest = creationRequestDto.toDomain();
+        final CodeSnippetCreationRequest creationRequest = creationRequestDto.toCreationDomain();
 
         final CodeSnippet createdSnippet = service.create(creationRequest);
 
@@ -44,7 +43,7 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
             @NotBlank final String id,
             @Valid @NotNull final CodeSnippetModificationRequestDto modificationRequestDto
     ) {
-        final CodeSnippetModificationRequest modificationRequest = modificationRequestDto.toDomain();
+        final CodeSnippetModificationRequest modificationRequest = modificationRequestDto.toModificationDomain();
 
         final CodeSnippet updatedSnippet = service.update(id, modificationRequest);
 

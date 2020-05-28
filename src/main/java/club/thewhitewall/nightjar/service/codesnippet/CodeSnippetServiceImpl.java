@@ -9,6 +9,7 @@ import club.thewhitewall.nightjar.exception.ResourceNotFoundException;
 import club.thewhitewall.nightjar.infra.logging.Loggable;
 import club.thewhitewall.nightjar.infra.validation.params.ValidParams;
 import club.thewhitewall.nightjar.repository.CodeSnippetRepository;
+import club.thewhitewall.nightjar.service.codesnippet.modification.CodeSnippetModificationCustomizer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Order.desc;
@@ -26,9 +28,14 @@ import static org.springframework.data.domain.Sort.Order.desc;
 public class CodeSnippetServiceImpl implements CodeSnippetService {
 
     private final CodeSnippetRepository repository;
+    private final List<CodeSnippetModificationCustomizer> modificationCustomizers;
 
-    public CodeSnippetServiceImpl(final CodeSnippetRepository repository) {
+    public CodeSnippetServiceImpl(
+            final CodeSnippetRepository repository,
+            final List<CodeSnippetModificationCustomizer> modificationCustomizers
+    ) {
         this.repository = repository;
+        this.modificationCustomizers = modificationCustomizers;
     }
 
     @Override
@@ -58,11 +65,8 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
             throw ResourceAlreadyExistsException.createInstance(CodeSnippet.class, "name", name);
         }
 
-        final CodeSnippet newCodeSnippet = CodeSnippet
-                .named(name)
-                .setValue(creationRequest.getValue())
-                .setDescription(creationRequest.getDescription())
-                .setQualifiers(creationRequest.getQualifiers());
+        final CodeSnippet newCodeSnippet = CodeSnippet.named(name);
+        modificationCustomizers.forEach(customizer -> customizer.customize(newCodeSnippet, creationRequest));
 
         return repository.save(newCodeSnippet);
     }
@@ -81,12 +85,9 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
     ) {
         final CodeSnippet snippet = getById(id);
 
-        final CodeSnippet codeSnippetToBeUpdated = snippet
-                .setValue(modificationRequest.getValue())
-                .setDescription(modificationRequest.getDescription())
-                .setQualifiers(modificationRequest.getQualifiers());
+        modificationCustomizers.forEach(customizer -> customizer.customize(snippet, modificationRequest));
 
-        return repository.save(codeSnippetToBeUpdated);
+        return repository.save(snippet);
     }
 
     @Override

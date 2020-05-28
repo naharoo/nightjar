@@ -1,45 +1,41 @@
 package club.thewhitewall.nightjar.domain;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
 
 import static club.thewhitewall.nightjar.util.Assertion.notBlank;
 
-@Data
-public class CodeSnippetCreationRequest {
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public class CodeSnippetCreationRequest extends CodeSnippetModificationRequest {
 
     @NotBlank
     private final String name;
-    private final String value;
-    private final String description;
-
-    @NotNull
-    private final Set<CodeSnippetQualifier> qualifiers;
 
     private CodeSnippetCreationRequest(
             final String name,
             final String value,
             final String description,
-            final Set<CodeSnippetQualifier> qualifiers
+            final Set<CodeSnippetQualifier> qualifiers,
+            final Map<CodeSnippetExtraAttribute, String> extraAttributes
     ) {
+        super(value, description, qualifiers, extraAttributes);
         this.name = name;
-        this.value = value;
-        this.description = description;
-        this.qualifiers = Optional.ofNullable(qualifiers).orElseGet(HashSet::new);
     }
 
     public static CodeSnippetCreationRequest createInstance(
             final String name,
             final String value,
             final String description,
-            final Set<CodeSnippetQualifier> qualifiers
+            final Set<CodeSnippetQualifier> qualifiers,
+            final Map<CodeSnippetExtraAttribute, String> extraAttributes
     ) {
-        return new CodeSnippetCreationRequest(notBlank("name", name), value, description, qualifiers);
+        return new CodeSnippetCreationRequest(notBlank("name", name), value, description, qualifiers, extraAttributes);
     }
 }

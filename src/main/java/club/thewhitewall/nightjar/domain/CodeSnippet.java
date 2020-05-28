@@ -70,6 +70,32 @@ public class CodeSnippet {
     private Set<CodeSnippetQualifier> qualifiers = new HashSet<>();
 
     @Getter
+    @Column(name = "value")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "extra_attribute")
+    @CollectionTable(
+            name = "code_snippet_extra_attribute",
+            joinColumns = @JoinColumn(
+                    name = "snippet_id",
+                    referencedColumnName = "id",
+                    nullable = false,
+                    foreignKey = @ForeignKey(name = "code_snippet_extra_attribute_snippet_id_fk")
+            ),
+            foreignKey = @ForeignKey(name = "code_snippet_extra_attribute_snippet_id_fk"),
+            uniqueConstraints = @UniqueConstraint(
+                    name = "code_snippet_extra_attribute_snippet_id_extra_attribute_pkey",
+                    columnNames = {"snippet_id", "extra_attribute"}
+            ),
+            indexes = @Index(
+                    name = "code_snippet_extra_attribute_snippet_id_extra_attribute_pkey",
+                    columnList = "snippet_id, extra_attribute",
+                    unique = true
+            )
+    )
+    private Map<CodeSnippetExtraAttribute, String> extraAttributes = new EnumMap<>(CodeSnippetExtraAttribute.class);
+
+    @Getter
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
@@ -116,6 +142,21 @@ public class CodeSnippet {
 
     public CodeSnippet removeQualifier(final CodeSnippetQualifier qualifier) {
         getQualifiers().remove(notNull("qualifier", qualifier));
+        return this;
+    }
+
+    public CodeSnippet setExtraAttributes(final Map<CodeSnippetExtraAttribute, String> extraAttributes) {
+        this.extraAttributes = notNull("extraAttributes", extraAttributes);
+        return this;
+    }
+
+    public CodeSnippet setExtraAttributeValue(final CodeSnippetExtraAttribute extraAttribute, final String value) {
+        getExtraAttributes().put(notNull("extraAttribute", extraAttribute), value);
+        return this;
+    }
+
+    public CodeSnippet removeExtraAttribute(final CodeSnippetExtraAttribute extraAttribute) {
+        getExtraAttributes().remove(notNull("extraAttribute", extraAttribute));
         return this;
     }
 
