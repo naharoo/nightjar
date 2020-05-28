@@ -1,5 +1,6 @@
 package club.thewhitewall.nightjar.endpoint.codesnippet;
 
+import club.thewhitewall.nightjar.domain.CodeSnippetQualifier;
 import club.thewhitewall.nightjar.endpoint.PageDto;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Validated
 @RestController
@@ -31,6 +33,9 @@ public interface CodeSnippetsEndpoint {
             @Min(0) @RequestParam(value = "page", defaultValue = "0") int page,
             @Min(0) @Max(100) @RequestParam(value = "size", defaultValue = "20") int size
     );
+
+    @GetMapping("/rest/code-snippets/qualifiers/list")
+    Set<CodeSnippetQualifier> getAllQualifiers();
 
     @GetMapping("/code-snippets")
     ModelAndView getSnippetsPage(ModelAndView modelAndView);

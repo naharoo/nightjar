@@ -1,9 +1,6 @@
 package club.thewhitewall.nightjar.endpoint.codesnippet;
 
-import club.thewhitewall.nightjar.domain.CodeSnippet;
-import club.thewhitewall.nightjar.domain.CodeSnippetCreationRequest;
-import club.thewhitewall.nightjar.domain.CodeSnippetModificationRequest;
-import club.thewhitewall.nightjar.domain.CodeSnippetSearchRequest;
+import club.thewhitewall.nightjar.domain.*;
 import club.thewhitewall.nightjar.endpoint.PageDto;
 import club.thewhitewall.nightjar.infra.logging.Loggable;
 import club.thewhitewall.nightjar.service.codesnippet.CodeSnippetService;
@@ -17,6 +14,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
@@ -66,5 +67,11 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
         modelAndView.setViewName("code-snippets");
 
         return modelAndView;
+    }
+
+    @Override
+    @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
+    public Set<CodeSnippetQualifier> getAllQualifiers() {
+        return Arrays.stream(CodeSnippetQualifier.values()).collect(Collectors.toSet());
     }
 }

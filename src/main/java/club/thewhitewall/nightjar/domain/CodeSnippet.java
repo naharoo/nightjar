@@ -6,10 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static club.thewhitewall.nightjar.util.Assertion.notBlank;
@@ -46,6 +43,33 @@ public class CodeSnippet {
     private String value;
 
     @Getter
+    @Column(name = "description")
+    private String description;
+
+    @Getter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name", nullable = false)
+    @ElementCollection(targetClass = CodeSnippetQualifier.class, fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "code_snippet_qualifier",
+            joinColumns = @JoinColumn(
+                    name = "snippet_id",
+                    referencedColumnName = "id",
+                    nullable = false,
+                    foreignKey = @ForeignKey(name = "code_snippet_qualifier_snippet_id_fk")
+            ),
+            foreignKey = @ForeignKey(name = "code_snippet_qualifier_snippet_id_fk"),
+            uniqueConstraints = {
+                    @UniqueConstraint(name = "code_snippet_qualifier_snippet_id_name_pkey", columnNames = {
+                            "snippet_id",
+                            "name"
+                    })
+            },
+            indexes = @Index(name = "code_snippet_qualifier_snippet_id_name_pkey", columnList = "snippet_id, name", unique = true)
+    )
+    private Set<CodeSnippetQualifier> qualifiers = new HashSet<>();
+
+    @Getter
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
@@ -77,6 +101,26 @@ public class CodeSnippet {
         } else {
             this.value = value.replace("\n", "\r\n").replace("\r\r\n", "\r\n");
         }
+        return this;
+    }
+
+    public CodeSnippet setQualifiers(final Set<CodeSnippetQualifier> qualifiers) {
+        this.qualifiers = notNull("qualifiers", qualifiers);
+        return this;
+    }
+
+    public CodeSnippet addQualifier(final CodeSnippetQualifier qualifier) {
+        getQualifiers().add(notNull("qualifier", qualifier));
+        return this;
+    }
+
+    public CodeSnippet removeQualifier(final CodeSnippetQualifier qualifier) {
+        getQualifiers().remove(notNull("qualifier", qualifier));
+        return this;
+    }
+
+    public CodeSnippet setDescription(final String description) {
+        this.description = description;
         return this;
     }
 

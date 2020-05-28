@@ -58,7 +58,11 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
             throw ResourceAlreadyExistsException.createInstance(CodeSnippet.class, "name", name);
         }
 
-        final CodeSnippet newCodeSnippet = CodeSnippet.named(name).setValue(creationRequest.getValue());
+        final CodeSnippet newCodeSnippet = CodeSnippet
+                .named(name)
+                .setValue(creationRequest.getValue())
+                .setDescription(creationRequest.getDescription())
+                .setQualifiers(creationRequest.getQualifiers());
 
         return repository.save(newCodeSnippet);
     }
@@ -77,7 +81,10 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
     ) {
         final CodeSnippet snippet = getById(id);
 
-        final CodeSnippet codeSnippetToBeUpdated = snippet.setValue(modificationRequest.getValue());
+        final CodeSnippet codeSnippetToBeUpdated = snippet
+                .setValue(modificationRequest.getValue())
+                .setDescription(modificationRequest.getDescription())
+                .setQualifiers(modificationRequest.getQualifiers());
 
         return repository.save(codeSnippetToBeUpdated);
     }
