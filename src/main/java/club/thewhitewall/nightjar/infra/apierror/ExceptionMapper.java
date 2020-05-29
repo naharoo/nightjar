@@ -1,5 +1,6 @@
 package club.thewhitewall.nightjar.infra.apierror;
 
+import club.thewhitewall.nightjar.exception.PreconditionFailedException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import club.thewhitewall.nightjar.exception.ResourceAlreadyExistsException;
@@ -73,6 +74,14 @@ public class ExceptionMapper {
     @ExceptionHandler(ResourceNotViableException.class)
     public ResponseEntity<ApiErrorDto> handleResourceNotViableException(final ResourceNotViableException e) {
         final HttpStatus status = HttpStatus.GONE;
+        final ApiErrorDto dto = new ApiErrorDto(status.value(), List.of(e.getMessage()));
+        log.info(dto.toString());
+        return new ResponseEntity<>(dto, status);
+    }
+
+    @ExceptionHandler(PreconditionFailedException.class)
+    public ResponseEntity<ApiErrorDto> handlePreconditionFailedException(final PreconditionFailedException e) {
+        final HttpStatus status = HttpStatus.PRECONDITION_FAILED;
         final ApiErrorDto dto = new ApiErrorDto(status.value(), List.of(e.getMessage()));
         log.info(dto.toString());
         return new ResponseEntity<>(dto, status);

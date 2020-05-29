@@ -135,6 +135,10 @@ public class CodeSnippet {
         return this;
     }
 
+    public boolean containsQualifier(final CodeSnippetQualifier qualifier) {
+        return getQualifiers().contains(notNull("qualifier", qualifier));
+    }
+
     public CodeSnippet addQualifier(final CodeSnippetQualifier qualifier) {
         getQualifiers().add(notNull("qualifier", qualifier));
         return this;
@@ -158,6 +162,10 @@ public class CodeSnippet {
     public CodeSnippet removeExtraAttribute(final CodeSnippetExtraAttribute extraAttribute) {
         getExtraAttributes().remove(notNull("extraAttribute", extraAttribute));
         return this;
+    }
+
+    public String getExtraAttributeValue(final CodeSnippetExtraAttribute extraAttribute) {
+        return getExtraAttributes().get(notNull("extraAttribute", extraAttribute));
     }
 
     public CodeSnippet setDescription(final String description) {

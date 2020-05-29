@@ -22,15 +22,19 @@ public class JavaScriptCodeSnippetExecutionStrategy implements CodeSnippetExecut
 
     private static final String LANGUAGE = "js";
     private static final String SCRIPT_FILE_NAME = "src.js";
-    private static final String SCRIPT_MAIN_METHOD_NAME = "invoke";
     private static final String SCRIPT_JSON_STRINGIFY_METHOD_NAME = "JSON.stringify";
     private static final String SCRIPT_JSON_PARSE_METHOD_NAME = "JSON.parse";
 
     private final ObjectMapper objectMapper;
+    private final CodeSnippetExecutionInvocationMethodResolver invocationMethodResolver;
 
     @Autowired
-    public JavaScriptCodeSnippetExecutionStrategy(final ObjectMapper objectMapper) {
+    public JavaScriptCodeSnippetExecutionStrategy(
+            final ObjectMapper objectMapper,
+            final CodeSnippetExecutionInvocationMethodResolver invocationMethodResolver
+    ) {
         this.objectMapper = objectMapper;
+        this.invocationMethodResolver = invocationMethodResolver;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class JavaScriptCodeSnippetExecutionStrategy implements CodeSnippetExecut
         try (final Context context = Context.create()) {
             final Source source = buildEvaluationSource(snippet);
             evaluateSource(source, context);
-            final Value invocationTarget = getInvocationTarget(context);
+            final Value invocationTarget = getInvocationTarget(context, snippet);
             final Value argumentsAsValue = compressJsonNode(request, context);
             final Value returnedValue = invocationTarget.execute(argumentsAsValue);
             response = extractJsonNode(returnedValue, context);
@@ -50,8 +54,13 @@ public class JavaScriptCodeSnippetExecutionStrategy implements CodeSnippetExecut
         return response;
     }
 
-    private Value getInvocationTarget(final Context context) {
-        return context.getBindings(LANGUAGE).getMember(SCRIPT_MAIN_METHOD_NAME);
+    private Value getInvocationTarget(
+            final Context context,
+            final CodeSnippet snippet
+    ) {
+        return context
+                .getBindings(LANGUAGE)
+                .getMember(invocationMethodResolver.resolveMethodName(snippet));
     }
 
     private void evaluateSource(final Source source, final Context context) {

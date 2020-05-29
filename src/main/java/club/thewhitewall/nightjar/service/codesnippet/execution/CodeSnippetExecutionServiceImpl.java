@@ -1,6 +1,8 @@
 package club.thewhitewall.nightjar.service.codesnippet.execution;
 
 import club.thewhitewall.nightjar.domain.CodeSnippet;
+import club.thewhitewall.nightjar.domain.CodeSnippetQualifier;
+import club.thewhitewall.nightjar.exception.PreconditionFailedException;
 import com.fasterxml.jackson.databind.JsonNode;
 import club.thewhitewall.nightjar.domain.CodeSnippetExecutionRequest;
 import club.thewhitewall.nightjar.infra.logging.Loggable;
@@ -33,8 +35,12 @@ public class CodeSnippetExecutionServiceImpl implements CodeSnippetExecutionServ
     @ValidParams
     @Transactional(readOnly = true)
     public JsonNode execute(@Valid @NotNull final CodeSnippetExecutionRequest executionRequest) {
-        final String snippetName = executionRequest.getSnippetName();
-        final CodeSnippet snippet = codeSnippetService.getByName(snippetName);
+        final CodeSnippet snippet = codeSnippetService.getByName(executionRequest.getSnippetName());
+
+        if (!snippet.containsQualifier(CodeSnippetQualifier.INVOCABLE)) {
+            throw PreconditionFailedException.createInstance("Only INVOCABLE CodeSnippets can be executed.");
+        }
+
         return codeSnippetExecutionStrategy.execute(snippet, executionRequest.getData());
     }
 }
