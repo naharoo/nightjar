@@ -40,6 +40,23 @@ function attachSaveButtonListener() {
     })
 }
 
+function attachSnippetDetailsButtonListener() {
+    const $snippetDetailsBtn = $('#snippetDetailsBtn');
+    const $detailsPopup = $('.details-popup');
+
+    $snippetDetailsBtn.on('click', function (event) {
+        const modalState = $detailsPopup.attr('modal-state');
+
+        if (modalState === 'closed') {
+            $detailsPopup.removeAttr('style');
+            $detailsPopup.attr('modal-state', 'open');
+        } else if (modalState === 'open') {
+            $detailsPopup.attr('style', 'display: none');
+            $detailsPopup.attr('modal-state', 'closed');
+        }
+    });
+}
+
 function bindKeyboardShortcuts() {
     $.key('alt+s', function (e) {
         const $saveBtn = $('#saveBtn');
@@ -53,11 +70,16 @@ function bindKeyboardShortcuts() {
         const $newSnippetBtn = $('#newSnippetBtn');
         $newSnippetBtn.click();
     });
+    $.key('alt+q', function (e) {
+        const $snippetDetailsBtn = $('#snippetDetailsBtn');
+        $snippetDetailsBtn.click();
+    });
 }
 
 $(document).ready(function () {
     attachSaveButtonListener();
     attachAllSnippetsButtonListener();
     attachNewSnippetButtonListener();
+    attachSnippetDetailsButtonListener();
     bindKeyboardShortcuts();
 });

@@ -85,10 +85,25 @@
             overflow: hidden;
             background-color: #1e1e1e;
         }
+
+        .details-popup {
+            background-color: #2e856e;
+            width: 200px;
+            height: 600px;
+            z-index: 100;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50% );
+        }
+
     </style>
     <link rel="stylesheet" href="/static/css/custom/common.css"/>
 </head>
 <body>
+<div class="details-popup" style="display: none" modal-state="closed">
+    asdasdasd
+</div>
 <div id="main-container">
     <div id="header-container">
         <div class="header-left-container">
@@ -134,29 +149,6 @@
             language: 'javascript',
             theme: 'vs-dark'
         });
-
-        let prevHeight = 0
-        const updateEditorHeight = () => {
-            const editorElement = editor.getDomNode()
-
-            if (!editorElement) {
-                return
-            }
-
-            const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight)
-            const lineCount = editor.getModel()?.getLineCount() || 1
-            const height = editor.getTopForLineNumber(lineCount + 1) + lineHeight
-
-            if (prevHeight !== height) {
-                prevHeight = height
-                editorElement.style.height = `${'$'}{height}px`
-                editor.layout()
-            }
-        }
-        window.editor.onDidChangeModelDecorations(() => {
-            updateEditorHeight() // typing
-            requestAnimationFrame(updateEditorHeight) // folding
-        })
 
         window.snippet.id = '${snippetId}';
         window.snippet.isNew = ${isNewSnippet};
