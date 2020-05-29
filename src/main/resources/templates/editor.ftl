@@ -23,6 +23,8 @@
             width: 100%;
             background-color: #1e1e1e;
 
+            max-height: 7%;
+
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -79,8 +81,8 @@
         }
 
         #editor-container {
-            height: 100%;
-            padding: 5px 0 0 0;
+            height: 93%;
+            overflow: hidden;
             background-color: #1e1e1e;
         }
     </style>
@@ -88,25 +90,22 @@
 </head>
 <body>
 <div id="main-container">
-<#--    <div>sjssdfkdsfhkdhkjhfjkdshkjhj</div>-->
-<#--    <div>-->
-        <div id="header-container">
-            <div class="header-left-container">
-                <#if isNewSnippet?boolean>
-                    <input id="newName" type="text" placeholder="New snippet name"/>
-                <#else>
-                    <div id="snippetName">${snippetName}</div>
-                </#if>
-                <button id="snippetDetailsBtn" class="header-btn">Details</button>
-            </div>
-            <div>
-                <button id="newSnippetBtn" class="header-btn">New Snippet</button>
-                <button id="allSnippetsBtn" class="header-btn">All Snippets</button>
-                <button id="saveBtn" class="header-btn">Save</button>
-            </div>
+    <div id="header-container">
+        <div class="header-left-container">
+            <#if isNewSnippet?boolean>
+                <input id="newName" type="text" placeholder="New snippet name"/>
+            <#else>
+                <div id="snippetName">${snippetName}</div>
+            </#if>
+            <button id="snippetDetailsBtn" class="header-btn">Details</button>
         </div>
-        <div id="editor-container"></div>
-<#--    </div>-->
+        <div>
+            <button id="newSnippetBtn" class="header-btn">New Snippet</button>
+            <button id="allSnippetsBtn" class="header-btn">All Snippets</button>
+            <button id="saveBtn" class="header-btn">Save</button>
+        </div>
+    </div>
+    <div id="editor-container"></div>
 </div>
 
 <script src="/static/js/jquery/jquery.min.js"></script>
@@ -135,6 +134,29 @@
             language: 'javascript',
             theme: 'vs-dark'
         });
+
+        let prevHeight = 0
+        const updateEditorHeight = () => {
+            const editorElement = editor.getDomNode()
+
+            if (!editorElement) {
+                return
+            }
+
+            const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight)
+            const lineCount = editor.getModel()?.getLineCount() || 1
+            const height = editor.getTopForLineNumber(lineCount + 1) + lineHeight
+
+            if (prevHeight !== height) {
+                prevHeight = height
+                editorElement.style.height = `${'$'}{height}px`
+                editor.layout()
+            }
+        }
+        window.editor.onDidChangeModelDecorations(() => {
+            updateEditorHeight() // typing
+            requestAnimationFrame(updateEditorHeight) // folding
+        })
 
         window.snippet.id = '${snippetId}';
         window.snippet.isNew = ${isNewSnippet};
