@@ -23,16 +23,21 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <frontend-src-dir>${project.basedir}/src/main/js</frontend-src-dir>
 
         <!-- Plugins -->
         <dockerfile.plugin.version>1.4.10</dockerfile.plugin.version>
         <dockerfile.push.skip>false</dockerfile.push.skip>
         <dockerfile.build.skip>false</dockerfile.build.skip>
+        <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
+        <node.version>v12.16.1</node.version>
+        <yarn.version>v1.22.4</yarn.version>
 
         <!-- Dependencies -->
         <spring.boot.version>2.3.0.RELEASE</spring.boot.version>
         <graal.version>20.1.0</graal.version>
         <commons.io.version>2.6</commons.io.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
     </properties>
 
     <build>
@@ -88,6 +93,14 @@
 
         <plugins>
             <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
@@ -119,6 +132,22 @@
                             <configuration>
                                 <skip>true</skip>
                             </configuration>
+                        </plugin>
+
+                        <!-- Maven Frontend Plugin -->
+                        <plugin>
+                            <groupId>com.github.eirslett</groupId>
+                            <artifactId>frontend-maven-plugin</artifactId>
+                            <version>${frontend-maven-plugin.version}</version>
+                            <configuration>
+                                <skip>true</skip>
+                            </configuration>
+                        </plugin>
+
+                        <!-- Maven Resources Plugin -->
+                        <plugin>
+                            <artifactId>maven-resources-plugin</artifactId>
+                            <version>${maven-resources-plugin.version}</version>
                         </plugin>
                     </plugins>
                 </pluginManagement>
@@ -157,6 +186,74 @@
                                 <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
                             </configuration>
                         </plugin>
+
+                        <!-- Maven Frontend Plugin -->
+                        <plugin>
+                            <groupId>com.github.eirslett</groupId>
+                            <artifactId>frontend-maven-plugin</artifactId>
+                            <version>${frontend-maven-plugin.version}</version>
+
+                            <configuration>
+                                <nodeVersion>${node.version}</nodeVersion>
+                                <yarnVersion>${yarn.version}</yarnVersion>
+                                <workingDirectory>${frontend-src-dir}</workingDirectory>
+                                <installDirectory>${project.build.directory}</installDirectory>
+                            </configuration>
+
+                            <executions>
+                                <execution>
+                                    <id>install-frontend-tools</id>
+                                    <goals>
+                                        <goal>install-node-and-yarn</goal>
+                                    </goals>
+                                </execution>
+
+                                <execution>
+                                    <id>yarn-install</id>
+                                    <goals>
+                                        <goal>yarn</goal>
+                                    </goals>
+                                    <configuration>
+                                        <arguments>install</arguments>
+                                    </configuration>
+                                </execution>
+
+                                <execution>
+                                    <id>build-frontend</id>
+                                    <goals>
+                                        <goal>yarn</goal>
+                                    </goals>
+                                    <phase>prepare-package</phase>
+                                    <configuration>
+                                        <arguments>build</arguments>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+
+                        <!-- Maven Resources Plugin -->
+                        <plugin>
+                            <artifactId>maven-resources-plugin</artifactId>
+                            <version>${maven-resources-plugin.version}</version>
+                            <executions>
+                                <execution>
+                                    <id>position-react-build</id>
+                                    <goals>
+                                        <goal>copy-resources</goal>
+                                    </goals>
+                                    <phase>prepare-package</phase>
+                                    <configuration>
+                                        <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+                                        <resources>
+                                            <resource>
+                                                <directory>${frontend-src-dir}/build</directory>
+                                                <filtering>false</filtering>
+                                            </resource>
+                                        </resources>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
                     </plugins>
                 </pluginManagement>
             </build>
@@ -186,10 +283,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

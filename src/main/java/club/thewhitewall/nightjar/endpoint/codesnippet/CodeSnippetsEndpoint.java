@@ -4,7 +4,6 @@ import club.thewhitewall.nightjar.domain.CodeSnippetQualifier;
 import club.thewhitewall.nightjar.endpoint.PageDto;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -36,7 +35,4 @@ public interface CodeSnippetsEndpoint {
 
     @GetMapping("/rest/code-snippets/qualifiers/list")
     Set<CodeSnippetQualifier> getAllQualifiers();
-
-    @GetMapping("/code-snippets")
-    ModelAndView getSnippetsPage(ModelAndView modelAndView);
 }
