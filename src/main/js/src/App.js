@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './global/styles/index.css';
+import {Route, Switch, withRouter} from 'react-router';
+import {ThemeProvider} from '@material-ui/core/styles';
+import theme from './global/styles/globalTheme';
+import CodeSnippetsContainer from "./code-snippets/CodeSnippetsContainer";
+import EditorContainer from "./editor/EditorContainer";
 
 function App() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo"/>
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-            </header>
+        <div className="app">
+            <ThemeProvider theme={theme}>
+                <Switch>
+                    <Route exact path="/" component={CodeSnippetsContainer}/>
+                    <Route path="/code-snippets" component={CodeSnippetsContainer}/>
+                    <Route path="/editor" component={EditorContainer}/>
+                </Switch>
+            </ThemeProvider>
         </div>
     );
 }
 
-export default App;
+export default withRouter(App);
