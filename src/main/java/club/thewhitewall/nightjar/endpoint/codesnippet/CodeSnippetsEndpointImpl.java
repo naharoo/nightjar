@@ -52,6 +52,13 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
 
     @Override
     @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
+    public CodeSnippetDto getById(@NotBlank final String id) {
+        final CodeSnippet codeSnippet = service.getById(id);
+        return CodeSnippetDto.from(codeSnippet);
+    }
+
+    @Override
+    @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
     public PageDto<CodeSnippetDto> search(final String name, @Min(0) final int page, @Min(0) @Max(100) final int size) {
         final CodeSnippetSearchRequest searchRequest = CodeSnippetSearchRequest.createInstance(name, page, size);
 
@@ -70,7 +77,21 @@ public class CodeSnippetsEndpointImpl implements CodeSnippetsEndpoint {
 
     @Override
     @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
+    public ModelAndView getIndexPage(final ModelAndView modelAndView) {
+        modelAndView.setViewName("code-snippets");
+
+        return modelAndView;
+    }
+
+    @Override
+    @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
     public Set<CodeSnippetQualifier> getAllQualifiers() {
         return Arrays.stream(CodeSnippetQualifier.values()).collect(Collectors.toSet());
+    }
+
+    @Override
+    @Loggable(before = LogLevel.DEBUG, after = LogLevel.INFO)
+    public Set<CodeSnippetExtraAttribute> getAllExtraAttributes() {
+        return Arrays.stream(CodeSnippetExtraAttribute.values()).collect(Collectors.toSet());
     }
 }

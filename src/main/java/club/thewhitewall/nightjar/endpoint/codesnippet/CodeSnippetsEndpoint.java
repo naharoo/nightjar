@@ -1,5 +1,6 @@
 package club.thewhitewall.nightjar.endpoint.codesnippet;
 
+import club.thewhitewall.nightjar.domain.CodeSnippetExtraAttribute;
 import club.thewhitewall.nightjar.domain.CodeSnippetQualifier;
 import club.thewhitewall.nightjar.endpoint.PageDto;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +28,9 @@ public interface CodeSnippetsEndpoint {
             @Valid @NotNull @RequestBody CodeSnippetModificationRequestDto modificationRequestDto
     );
 
+    @GetMapping("/rest/code-snippets/{id}")
+    CodeSnippetDto getById(@NotBlank @PathVariable("id") String id);
+
     @GetMapping("/rest/code-snippets/search")
     PageDto<CodeSnippetDto> search(
             @RequestParam(value = "name", required = false) String name,
@@ -37,6 +41,12 @@ public interface CodeSnippetsEndpoint {
     @GetMapping("/rest/code-snippets/qualifiers/list")
     Set<CodeSnippetQualifier> getAllQualifiers();
 
+    @GetMapping("/rest/code-snippets/extra-attributes/list")
+    Set<CodeSnippetExtraAttribute> getAllExtraAttributes();
+
     @GetMapping("/code-snippets")
     ModelAndView getSnippetsPage(ModelAndView modelAndView);
+
+    @GetMapping("/")
+    ModelAndView getIndexPage(ModelAndView modelAndView);
 }

@@ -17,13 +17,13 @@
         #main-container {
             height: 100%;
             width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         #header-container {
             width: 100%;
             background-color: #1e1e1e;
-
-            max-height: 7%;
 
             display: flex;
             flex-direction: row;
@@ -81,28 +81,100 @@
         }
 
         #editor-container {
-            height: 93%;
+            height: 100%;
             overflow: hidden;
             background-color: #1e1e1e;
         }
 
         .details-popup {
+            display: flex;
+            flex-direction: column;
             background-color: #2e856e;
-            width: 200px;
-            height: 600px;
+            border: 1px #e5d8d8;
+            width: 400px;
+            height: auto;
             z-index: 100;
             position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate(-50%, -50% );
+            transform: translate(-50%, -50%);
+        }
+
+        .popup-form-item {
+            width: 100%;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .label {
+            text-align: center;
+            margin: 3px 0;
+            color: white;
+        }
+
+        .textarea {
+            width: 300px;
+            height: 100px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            resize: none;
+            display: block;
+        }
+
+        .qualifiers {
+            width: 300px;
+        }
+
+        .extra-attributes-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .extra-attribute {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 2px 0;
+        }
+
+        .extra-attribute-key {
+            padding: 2px;
+        }
+
+        .extra-attribute-value {
+            padding: 2px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
         }
 
     </style>
     <link rel="stylesheet" href="/static/css/custom/common.css"/>
+    <link rel="stylesheet" href="/static/css/multiselect/multiselect.css"/>
 </head>
 <body>
 <div class="details-popup" style="display: none" modal-state="closed">
-    asdasdasd
+    <div class="popup-form-item">
+        <div style="display: flex; flex-direction: column">
+            <label for="description" class="label">Description</label>
+            <textarea name="description" id="description" class="textarea"></textarea>
+        </div>
+    </div>
+    <div class="popup-form-item">
+        <div style="display: flex; flex-direction: column">
+            <label class="label">Qualifiers</label>
+            <span class="qualifiers"></span>
+        </div>
+    </div>
+    <div class="popup-form-item">
+        <div style="display: flex; flex-direction: column">
+            <label class="label">Extra Attributes</label>
+            <div id="extra-attributes-wrapper" class="extra-attributes-wrapper">
+            </div>
+        </div>
+    </div>
 </div>
 <div id="main-container">
     <div id="header-container">
@@ -129,6 +201,7 @@
 <script src="/static/js/requirejs/require.min.js"></script>
 <script>
     window.snippet = {};
+    window.snippetDetails = {};
 
     require.config({paths: {'vs': 'https://unpkg.com/monaco-editor@0.20.0/min/vs'}});
     window.MonacoEnvironment = {getWorkerUrl: () => proxy};
@@ -149,11 +222,12 @@
             language: 'javascript',
             theme: 'vs-dark'
         });
-
-        window.snippet.id = '${snippetId}';
-        window.snippet.isNew = ${isNewSnippet};
     });
+
+    window.snippet.id = '${snippetId}';
+    window.snippet.isNew = ${isNewSnippet};
 </script>
+<script src="/static/js/multiselect/bundle.min.js"></script>
 <script src="/static/js/custom/common.js"></script>
 <script src="/static/js/custom/editor/editor.js"></script>
 </body>
