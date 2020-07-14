@@ -8,7 +8,14 @@ function attachSaveButtonListener() {
         const newName = isNewSnippet ? $('#newName')[0].value : null;
         const description = $('#description').val();
         const qualifiers = window.snippetDetails.qualifiersMultiselect.value();
-        const extraAttributesWrapper = $('.extra-attributes-wrapper');
+        const $extraAttributes = $('.extra-attribute')
+
+        const extraAttributes = {};
+        $extraAttributes.each(index => {
+            const $extraAttribute = $extraAttributes.eq(index);
+            const key = $extraAttribute.children("b").html();
+            extraAttributes[key] = $extraAttribute.children("input").val();
+        });
 
         if (isNewSnippet) {
             $.ajax({
@@ -19,7 +26,8 @@ function attachSaveButtonListener() {
                     name: newName,
                     value: snippetValue,
                     description: description,
-                    qualifiers: qualifiers
+                    qualifiers: qualifiers,
+                    extraAttributes: extraAttributes
                 }),
                 success: function (responseData, status, xhr) {
                     redirectToUrl('/editor?snippetId=' + responseData.id);
@@ -35,7 +43,8 @@ function attachSaveButtonListener() {
                 data: JSON.stringify({
                     value: snippetValue,
                     description: description,
-                    qualifiers: qualifiers
+                    qualifiers: qualifiers,
+                    extraAttributes: extraAttributes
                 }),
                 success: function (responseData, status, xhr) {
                     redirectToUrl('/editor?snippetId=' + responseData.id);
@@ -93,7 +102,6 @@ function drawDescription() {
             url: `/rest/code-snippets/${snippetId}`,
             type: 'GET',
             success: (snippet) => {
-                console.log(snippet);
                 $('#description').val(snippet.description);
             },
             error: showErrorPopup
