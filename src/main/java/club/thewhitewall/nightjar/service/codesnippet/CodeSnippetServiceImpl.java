@@ -10,6 +10,7 @@ import club.thewhitewall.nightjar.infra.logging.Loggable;
 import club.thewhitewall.nightjar.infra.validation.params.ValidParams;
 import club.thewhitewall.nightjar.repository.CodeSnippetRepository;
 import club.thewhitewall.nightjar.service.codesnippet.modification.CodeSnippetModificationCustomizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,6 +31,7 @@ public class CodeSnippetServiceImpl implements CodeSnippetService {
     private final CodeSnippetRepository repository;
     private final List<CodeSnippetModificationCustomizer> modificationCustomizers;
 
+    @Autowired
     public CodeSnippetServiceImpl(
             final CodeSnippetRepository repository,
             final List<CodeSnippetModificationCustomizer> modificationCustomizers
