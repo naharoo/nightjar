@@ -32,7 +32,7 @@
         <!-- Dependencies -->
         <spring.boot.version>2.3.0.RELEASE</spring.boot.version>
         <graal.version>20.1.0</graal.version>
-        <commons.io.version>2.6</commons.io.version>
+        <commons.io.version>2.7</commons.io.version>
     </properties>
 
     <build>
